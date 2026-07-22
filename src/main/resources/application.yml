@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource # 连接池指定 springboot2.02版本默认使用HikariCP 此处要替换成Druid
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.79.3.54:3306/bic_normalization?characterEncoding=utf-8&useSSL=true&serverTimezone=Asia/Shanghai
+    username: bictest
+    password: bic2023##
