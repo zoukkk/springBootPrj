@@ -19,7 +19,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public Result register(@Pattern(regexp = "^\\${2,5}$") String username, @Pattern(regexp = "^\\${2,5}$") String password) {
+    public Result register(@Pattern(regexp = "^\\S{2,18}$") String username, @Pattern(regexp = "^\\S{2,18}$") String password) {
         // 查询用户
         User u = userService.findByUserName(username);
         if (u == null) {
@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Result<String> login(@Pattern(regexp = "^\\${2,5}$") String username, @Pattern(regexp = "^\\${2,5}$") String password) {
+    public Result<String> login(@Pattern(regexp = "^\\S{2,18}$") String username, @Pattern(regexp = "^\\S{2,18}$") String password) {
         User loginUser = userService.findByUserName(username);
         if (loginUser == null) {
             return Result.error("暂无此用户，请先注册！");
