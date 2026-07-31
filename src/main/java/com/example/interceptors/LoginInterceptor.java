@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-
 import java.util.Map;
 
 @Component
@@ -21,6 +20,8 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;
         } catch (Exception e) {
             response.setStatus(401);
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write("{\"code\":1,\"message\":\"请先登录\",\"data\":null}");
             return false;
         }
     }

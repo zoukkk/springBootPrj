@@ -5,10 +5,10 @@ import com.example.pojo.Result;
 import com.example.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/category")
@@ -17,8 +17,31 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping
-    public Result add(@RequestBody @Validated Category category) {
+    public Result add(@RequestBody @Validated(Category.Add.class) Category category) {
         categoryService.add(category);
-        return Result.success("新增成功");
+        return Result.success();
+    }
+
+    @GetMapping
+    public Result<List<Category>> list() {
+        List<Category> data = categoryService.list();
+        return Result.success(data);
+    }
+    @GetMapping("/detail")
+    public Result<Category> detail(Integer id) {
+        Category data = categoryService.detail(id);
+        return Result.success(data);
+    }
+
+    @PostMapping("/update")
+    public Result update(@RequestBody @Validated(Category.Update.class) Category category) {
+        categoryService.update(category);
+        return Result.success();
+    }
+
+    @PostMapping("/delete")
+    public Result delete(@RequestBody Map<String, Object> params) {
+        categoryService.delete(params);
+        return Result.success();
     }
 }
