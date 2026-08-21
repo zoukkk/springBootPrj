@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ArticleServiceImp implements ArticleService {
+public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private ArticleMapper articleMapper;
 
@@ -35,9 +35,11 @@ public class ArticleServiceImp implements ArticleService {
         PageBean<Article> pb = new PageBean<>();
         // 开启分页
         PageHelper.startPage(pageNum, pageSize);
+
         Map<String, Object> map = ThreadLocalUtil.get();
         Integer userId = (Integer) map.get("id");
         List<Article> as = articleMapper.list(userId, categoryId, state);
+
         Page<Article> p = (Page<Article>) as;
         pb.setTotal(p.getTotal());
         pb.setItems(p.getResult());
