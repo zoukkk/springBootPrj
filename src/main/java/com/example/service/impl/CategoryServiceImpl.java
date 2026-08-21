@@ -44,8 +44,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void delete(Map<String,Object> params) {
-        Integer id =(Integer) params.get("id");
+    public void delete(Map<String, Object> params) {
+        Integer id = (Integer) params.get("id");
         categoryMapper.delete(id);
     }
 }
