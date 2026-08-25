@@ -21,14 +21,27 @@ public class ArticleController {
     }
 
     @GetMapping("/list")
-    public Result<PageBean<Article>> list(
-            Integer pageNum,
-            Integer pageSize,
-            @RequestParam(required = false) Integer categoryId,
-            @RequestParam(required = false) String state
-    ) {
+    public Result<PageBean<Article>> list(Integer pageNum, Integer pageSize, @RequestParam(required = false) Integer categoryId, @RequestParam(required = false) String state) {
         PageBean<Article> pb = articleService.list(pageNum, pageSize, categoryId, state);
         return Result.success(pb);
+    }
+
+    @GetMapping("/detail")
+    public Result<Article> detail(@RequestParam Integer id) {
+        Article result = articleService.detail(id);
+        return Result.success(result);
+    }
+
+    @PostMapping("update")
+    public Result update(@RequestBody @Validated Article article) {
+        articleService.update(article);
+        return Result.success();
+    }
+
+    @GetMapping("delete")
+    public Result delete(@RequestParam Integer id) {
+        articleService.delete(id);
+        return Result.success();
     }
 }
 

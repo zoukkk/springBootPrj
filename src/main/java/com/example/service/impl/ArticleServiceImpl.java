@@ -35,14 +35,34 @@ public class ArticleServiceImpl implements ArticleService {
         PageBean<Article> pb = new PageBean<>();
         // 开启分页
         PageHelper.startPage(pageNum, pageSize);
-
         Map<String, Object> map = ThreadLocalUtil.get();
         Integer userId = (Integer) map.get("id");
         List<Article> as = articleMapper.list(userId, categoryId, state);
-
         Page<Article> p = (Page<Article>) as;
         pb.setTotal(p.getTotal());
         pb.setItems(p.getResult());
         return pb;
+    }
+
+    @Override
+    public Article detail(Integer id) {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Integer userId = (Integer) map.get("id");
+        Article detail= articleMapper.detail(userId,id);
+        return detail;
+    }
+
+    @Override
+    public void update(Article article) {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Integer userId = (Integer) map.get("id");
+        articleMapper.update(userId,article);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Integer userId = (Integer) map.get("id");
+        articleMapper.delete(userId, id);
     }
 }

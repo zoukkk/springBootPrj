@@ -9,3 +9,11 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+
+aliyun:
+  oss:
+    endpoint: https://oss-cn-guangzhou.aliyuncs.com
+    access-key-id: ${OSS_ACCESS_KEY_ID}
+    access-key-secret: ${OSS_ACCESS_KEY_SECRET}
+    bucket-name: buckeybyzk
+    region: cn-guangzhou
