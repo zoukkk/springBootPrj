@@ -9,12 +9,15 @@ import com.example.utils.ThreadLocalUtil;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/user")
@@ -22,7 +25,10 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
+    // 注册
     @PostMapping("/register")
     public Result register(@Pattern(regexp = "^\\S{2,18}$") String username, @Pattern(regexp = "^\\S{2,18}$") String password) {
         // 查询用户
@@ -35,6 +41,7 @@ public class UserController {
         }
     }
 
+    // 登录
     @PostMapping("/login")
     public Result<String> login(@Pattern(regexp = "^\\S{2,18}$") String username, @Pattern(regexp = "^\\S{2,18}$") String password) {
         User loginUser = userService.findByUserName(username);
@@ -46,11 +53,15 @@ public class UserController {
             user.put("id", loginUser.getId());
             user.put("username", loginUser.getUsername());
             String token = JwtUtil.genToken(user);
+            // 把token存入redis
+            ValueOperations<String, String> operationsToken = stringRedisTemplate.opsForValue();
+            operationsToken.set(token,token,1, TimeUnit.HOURS);
             return Result.success(token);
         }
         return Result.error("密码错误！");
     }
 
+    // 获取用户信息
     @GetMapping("/userInfo")
     public Result<User> userInfo() {
         Map<String, Object> map = ThreadLocalUtil.get();
@@ -58,20 +69,23 @@ public class UserController {
         return Result.success(userService.findByUserName(userName));
     }
 
+    // 更新用户
     @PostMapping("/update")
     public Result update(@RequestBody @Validated User user) {
         userService.updata(user);
         return Result.success();
     }
 
+    // 更新头像
     @PatchMapping("/updateAvatar")
     public Result updateAvatar(@RequestParam @URL String avatarUrl) {
         userService.updataAvatar(avatarUrl);
         return Result.success();
     }
 
+    // 修改密码
     @PatchMapping("/updatePwd")
-    public Result updatePwd(@RequestBody Map<String, String> params) {
+    public Result updatePwd(@RequestBody Map<String, String> params,@RequestHeader("Authorization") String token) {
         String oldPwd = params.get("old_pwd");
         String newPwd = params.get("new_pwd");
         String rePwd = params.get("re_pwd");
@@ -88,6 +102,8 @@ public class UserController {
             return Result.error("两次填写的密码不一致");
         }
         userService.updataPwd(newPwd);
+        ValueOperations<String, String> oldToken = stringRedisTemplate.opsForValue();
+        oldToken.getOperations().delete(token);
         return Result.success();
     }
 }
