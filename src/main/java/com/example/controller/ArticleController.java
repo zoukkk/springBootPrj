@@ -1,12 +1,15 @@
 package com.example.controller;
 
 import com.example.pojo.Article;
+import com.example.pojo.Ids;
 import com.example.pojo.PageBean;
 import com.example.pojo.Result;
 import com.example.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/article")
@@ -32,15 +35,15 @@ public class ArticleController {
         return Result.success(result);
     }
 
-    @PostMapping("update")
+    @PostMapping("/update")
     public Result update(@RequestBody @Validated Article article) {
         articleService.update(article);
         return Result.success();
     }
 
-    @GetMapping("delete")
-    public Result delete(@RequestParam Integer id) {
-        articleService.delete(id);
+    @DeleteMapping("/delete")
+    public Result delete(@RequestBody Ids ids) {
+        articleService.delete(ids);
         return Result.success();
     }
 }

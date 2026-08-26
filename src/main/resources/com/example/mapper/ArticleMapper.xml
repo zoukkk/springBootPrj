@@ -16,4 +16,12 @@
             and create_user = #{userId}
         </where>
     </select>
+    <delete id="delete">
+        delete from zip_st_article
+        where create_user = #{userId}
+        and id in
+        <foreach collection="ids.ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

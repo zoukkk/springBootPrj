@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.pojo.Article;
+import com.example.pojo.Ids;
 import com.example.pojo.PageBean;
 
 public interface ArticleService {
@@ -13,5 +14,5 @@ public interface ArticleService {
     // 更新文章
     void update(Article article);
     // 刪除文章
-    void delete(Integer id);
+    void delete(Ids id);
 }

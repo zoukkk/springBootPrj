@@ -2,6 +2,7 @@ package com.example.service.impl;
 
 import com.example.mapper.ArticleMapper;
 import com.example.pojo.Article;
+import com.example.pojo.Ids;
 import com.example.pojo.PageBean;
 import com.example.service.ArticleService;
 import com.example.utils.ThreadLocalUtil;
@@ -60,7 +61,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Ids id) {
         Map<String, Object> map = ThreadLocalUtil.get();
         Integer userId = (Integer) map.get("id");
         articleMapper.delete(userId, id);
