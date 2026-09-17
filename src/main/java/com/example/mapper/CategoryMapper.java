@@ -21,7 +21,7 @@ public interface CategoryMapper {
     Category detail(Integer id);
 
     // 更新文章
-    @Update("update zip_st_category set category_name=#{categoryName},category_alias = #{categoryAlias},update_time=now() where id=#{id}")
+    @Update("update zip_st_category set category_name=#{categoryName},category_alias = #{categoryAlias},update_time=CURRENT_TIMESTAMP where id=#{id}")
     void update(Category category);
 
     // 删除文章

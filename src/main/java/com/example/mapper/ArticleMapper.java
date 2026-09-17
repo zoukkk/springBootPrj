@@ -21,7 +21,7 @@ public interface ArticleMapper {
     Article detail(Integer userId, Integer id);
 
     // 更新
-    @Update("update zip_st_article set title=#{article.title}, content=#{article.content}, cover_img=#{article.coverImg}, state=#{article.state}, update_time=now() where id=#{article.id} and create_user=#{userId}")
+    @Update("update zip_st_article set title=#{article.title}, content=#{article.content}, cover_img=#{article.coverImg}, state=#{article.state}, update_time=CURRENT_TIMESTAMP where id=#{article.id} and create_user=#{userId}")
     void update(@Param("userId") Integer userId, @Param("article") Article article);
 
     // 删除

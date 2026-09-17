@@ -1,6 +1,7 @@
 package com.example;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -10,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 
 @SpringBootTest
+@Disabled("演示型测试会写入默认 Redis 库，不纳入自动化测试")
 public class RedisTest {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;

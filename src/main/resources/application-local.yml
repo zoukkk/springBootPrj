@@ -16,16 +16,3 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-
-aliyun:
-  oss:
-    endpoint: ${OSS_ENDPOINT:https://oss-cn-guangzhou.aliyuncs.com}
-    access-key-id: ${OSS_ACCESS_KEY_ID:}
-    access-key-secret: ${OSS_ACCESS_KEY_SECRET:}
-    bucket-name: ${OSS_BUCKET_NAME:}
-    region: ${OSS_REGION:cn-guangzhou}
-
-app:
-  jwt:
-    secret: ${JWT_SECRET:}
-    expires-in-seconds: 7200
