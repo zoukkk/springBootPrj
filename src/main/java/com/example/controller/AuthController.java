@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.dto.LoginRequest;
 import com.example.dto.LoginResponse;
 import com.example.dto.MenuResponse;
+import com.example.dto.RegisterRequest;
 import com.example.dto.UserInfoResponse;
 import com.example.pojo.Result;
 import com.example.security.AuthenticatedUser;
@@ -30,6 +31,12 @@ public class AuthController {
     @PostMapping("/login")
     public Result<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         return Result.success(authService.login(request));
+    }
+
+    @PostMapping("/register")
+    public Result<Void> register(@Valid @RequestBody RegisterRequest request) {
+        authService.register(request);
+        return Result.success();
     }
 
     @PostMapping("/logout")

@@ -1,0 +1,35 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.1.3)
+
+2026-09-18T14:18:33.625+08:00  INFO 13500 --- [           main] com.example.Application                  : Starting Application v1.0-SNAPSHOT using Java 17.0.12 with PID 13500 (C:\Users\admin\Desktop\springbootProject\springBootPrj\target\springbootProject-1.0-SNAPSHOT.jar started by admin in C:\Users\admin\Desktop\springbootProject\springBootPrj)
+2026-09-18T14:18:33.629+08:00  INFO 13500 --- [           main] com.example.Application                  : No active profile set, falling back to 1 default profile: "default"
+2026-09-18T14:18:35.659+08:00  INFO 13500 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-09-18T14:18:35.668+08:00  INFO 13500 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-09-18T14:18:35.735+08:00  INFO 13500 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 18 ms. Found 0 Redis repository interfaces.
+2026-09-18T14:18:37.509+08:00  INFO 13500 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2026-09-18T14:18:37.530+08:00  INFO 13500 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-18T14:18:37.530+08:00  INFO 13500 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.12]
+2026-09-18T14:18:37.692+08:00  INFO 13500 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-09-18T14:18:37.694+08:00  INFO 13500 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3952 ms
+2026-09-18T14:18:37.720+08:00  WARN 13500 --- [           main] com.example.security.JwtService          : JWT_SECRET 未配置，已生成仅在本次进程有效的随机密钥
+2026-09-18T14:18:38.730+08:00  INFO 13500 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-09-18T14:18:38.908+08:00  INFO 13500 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@23c650a3
+2026-09-18T14:18:38.911+08:00  INFO 13500 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-09-18T14:18:39.527+08:00  WARN 13500 --- [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 78994634-3043-438e-a1da-27cc5b202f03
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-09-18T14:18:40.149+08:00  INFO 13500 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1e6dad8, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7b3315a5, org.springframework.security.web.context.SecurityContextHolderFilter@4930539b, org.springframework.security.web.header.HeaderWriterFilter@9a2ec9b, org.springframework.web.filter.CorsFilter@8ed9cf, org.springframework.security.web.authentication.logout.LogoutFilter@3051e0b2, com.example.security.JwtAuthenticationFilter@3704122f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@22bd2039, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@705f83a7, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@f72203, org.springframework.security.web.session.SessionManagementFilter@7cab1508, org.springframework.security.web.access.ExceptionTranslationFilter@3cbcd8f3, org.springframework.security.web.access.intercept.AuthorizationFilter@29ea78b1]
+2026-09-18T14:18:40.953+08:00  INFO 13500 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2026-09-18T14:18:40.980+08:00  INFO 13500 --- [           main] com.example.Application                  : Started Application in 8.251 seconds (process running for 9.833)
+2026-09-18T14:18:49.522+08:00  INFO 13500 --- [nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-18T14:18:49.522+08:00  INFO 13500 --- [nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-09-18T14:18:49.524+08:00  INFO 13500 --- [nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms

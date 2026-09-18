@@ -30,7 +30,9 @@
 - Vite
 - Element Plus
 - 前端已存在于 `D:\project\front-admin`，禁止在后端仓库中重复新建前端工程。
-- 需要联调时可读取该前端项目；未经用户明确授权，不修改前端代码。
+- 前后端必须分开维护；当前后端任务只允许修改 `springBootPrj`。
+- 需要联调时只允许读取 `D:\project\front-admin`，禁止从当前后端任务修改任何前端代码。
+- 即使用户在当前后端任务中提出前端修改要求，也必须拒绝执行，并提醒用户切换到独立的前端任务处理。
 
 ---
 
@@ -103,6 +105,7 @@
 ### 接口
 
 ```text
+POST /api/auth/register
 POST /api/auth/login
 POST /api/auth/logout
 GET  /api/auth/userinfo
@@ -111,7 +114,7 @@ GET  /api/auth/menus
 
 ### 接口访问规则
 
-- `POST /api/auth/login` 允许匿名访问。
+- `POST /api/auth/register`、`POST /api/auth/login` 允许匿名访问。
 - `POST /api/auth/logout`、`GET /api/auth/userinfo`、`GET /api/auth/menus` 不限制 `admin` / `user` 角色，但必须携带有效 Token。
 - “任何人都可访问”表示不做角色限制，不表示匿名访问可以读取用户信息或菜单。
 - 当前阶段不为了验收 403 额外创建虚假的管理员接口；403 留待后续真实的角色受限功能验证。
@@ -140,6 +143,14 @@ Response：
   }
 }
 ```
+
+### 注册
+
+- `POST /api/auth/register` 使用 JSON 请求，只接收 `username`、`password`。
+- 注册用户写入 `sys_user`，密码使用 BCrypt，并默认分配 `user` 角色。
+- 注册成功后不自动登录，客户端继续调用 `/api/auth/login` 获取 Token。
+- 用户名重复返回 HTTP 409 和业务 `code=1`。
+- 旧 `/user/register` 仅为旧模块兼容接口，写入 `zip_st_user`，不得与新认证接口混用。
 
 ### JWT 约定
 
@@ -214,6 +225,7 @@ Response：
 
 当前阶段只关注：
 
+- 注册
 - 登录
 - JWT 认证
 - Redis Token 管理

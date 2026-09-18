@@ -107,9 +107,10 @@ INSERT OR IGNORE INTO sys_menu
     (id, parent_id, name, path, component, icon, sort, visible, status)
 VALUES
     (1, 0, '首页', '/dashboard', 'DashboardView', 'HomeFilled', 1, 1, 1),
-    (2, 0, '用户管理', '/users', 'UserView', 'User', 2, 1, 1),
-    (3, 0, '文章管理', '/articles', 'ArticleView', 'Document', 3, 1, 1),
-    (4, 0, '分类管理', '/categories', 'CategoryView', 'CollectionTag', 4, 1, 1);
+    (2, 0, '系统管理', '/system', 'SystemLayout', 'Setting', 2, 1, 1),
+    (3, 2, '用户管理', '/system/users', 'UserView', 'User', 1, 1, 1),
+    (4, 2, '角色管理', '/system/roles', 'RoleView', 'UserFilled', 2, 1, 1),
+    (5, 2, '菜单管理', '/system/menus', 'MenuView', 'Menu', 3, 1, 1);
 
 INSERT OR IGNORE INTO sys_role_menu (role_id, menu_id) VALUES (2, 1);
 

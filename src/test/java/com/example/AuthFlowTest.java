@@ -15,6 +15,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -61,6 +63,40 @@ class AuthFlowTest {
     }
 
     @Test
+    void registersNewUserWithBcryptAndDefaultRole() throws Exception {
+        String username = "reg" + UUID.randomUUID().toString().substring(0, 8);
+        String request = objectMapper.writeValueAsString(
+                java.util.Map.of("username", username, "password", "123456"));
+
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(0));
+
+        String storedPassword = jdbcTemplate.queryForObject(
+                "select password from sys_user where username = ?", String.class, username);
+        assertThat(storedPassword).startsWith("$2");
+
+        String token = login(username, "123456");
+        mockMvc.perform(get("/api/auth/userinfo").header("Authorization", bearer(token)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.username").value(username))
+                .andExpect(jsonPath("$.data.roles[0]").value("user"));
+        mockMvc.perform(get("/api/auth/menus").header("Authorization", bearer(token)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(1))
+                .andExpect(jsonPath("$.data[0].path").value("/dashboard"));
+
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value(1))
+                .andExpect(jsonPath("$.message").value("用户名已存在"));
+    }
+
+    @Test
     void supportsUserInfoMenusTwoSessionsAndLogout() throws Exception {
         String first = login();
         String second = login();
@@ -74,7 +110,10 @@ class AuthFlowTest {
         mockMvc.perform(get("/api/auth/menus").header("Authorization", bearer(second)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(0))
-                .andExpect(jsonPath("$.data.length()").value(4));
+                .andExpect(jsonPath("$.data.length()").value(2))
+                .andExpect(jsonPath("$.data[0].name").value("首页"))
+                .andExpect(jsonPath("$.data[1].name").value("系统管理"))
+                .andExpect(jsonPath("$.data[1].children.length()").value(3));
 
         String third = login();
         mockMvc.perform(get("/api/auth/userinfo").header("Authorization", bearer(first)))

@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -25,6 +26,12 @@ public interface AuthMapper {
                     @Param("password") String password,
                     @Param("nickname") String nickname);
 
+    @Insert("insert or ignore into sys_user(username, password, nickname, status) " +
+            "values(#{username}, #{password}, #{nickname}, 1)")
+    int insertUserIfAbsent(@Param("username") String username,
+                           @Param("password") String password,
+                           @Param("nickname") String nickname);
+
     @Select("select distinct r.code from sys_role r " +
             "join sys_user_role ur on ur.role_id = r.id and ur.del_flag = 0 " +
             "where ur.user_id = #{userId} and r.status = 1 and r.del_flag = 0 order by r.code")
@@ -33,6 +40,28 @@ public interface AuthMapper {
     @Insert("insert or ignore into sys_user_role(user_id, role_id) " +
             "select #{userId}, id from sys_role where code = #{roleCode} and del_flag = 0")
     void assignRole(@Param("userId") Long userId, @Param("roleCode") String roleCode);
+
+    @Insert("insert or ignore into sys_menu " +
+            "(id, parent_id, name, path, component, icon, sort, visible, status, del_flag) " +
+            "values(#{id}, #{parentId}, #{name}, #{path}, #{component}, #{icon}, #{sort}, 1, 1, 0)")
+    void insertMenu(@Param("id") Long id,
+                    @Param("parentId") Long parentId,
+                    @Param("name") String name,
+                    @Param("path") String path,
+                    @Param("component") String component,
+                    @Param("icon") String icon,
+                    @Param("sort") Integer sort);
+
+    @Update("update sys_menu set parent_id = #{parentId}, name = #{name}, path = #{path}, " +
+            "component = #{component}, icon = #{icon}, sort = #{sort}, visible = 1, status = 1, " +
+            "del_flag = 0, update_time = CURRENT_TIMESTAMP where id = #{id}")
+    void updateMenu(@Param("id") Long id,
+                    @Param("parentId") Long parentId,
+                    @Param("name") String name,
+                    @Param("path") String path,
+                    @Param("component") String component,
+                    @Param("icon") String icon,
+                    @Param("sort") Integer sort);
 
     @Select("select id, parent_id, name, path, component, icon, sort from sys_menu " +
             "where visible = 1 and status = 1 and del_flag = 0 order by sort, id")

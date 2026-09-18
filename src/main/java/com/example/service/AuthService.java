@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.dto.LoginRequest;
 import com.example.dto.LoginResponse;
 import com.example.dto.MenuResponse;
+import com.example.dto.RegisterRequest;
 import com.example.dto.UserInfoResponse;
 import com.example.exception.BusinessException;
 import com.example.mapper.AuthMapper;
@@ -14,6 +15,7 @@ import com.example.security.TokenSessionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -61,6 +63,18 @@ public class AuthService {
         tokenSessionService.register(user.getId(), tokenId, issuedAt,
                 Duration.ofSeconds(jwtService.getExpiresInSeconds()));
         return new LoginResponse(token, "Bearer", jwtService.getExpiresInSeconds());
+    }
+
+    @Transactional
+    public void register(RegisterRequest request) {
+        int inserted = authMapper.insertUserIfAbsent(
+                request.username(), passwordEncoder.encode(request.password()), request.username());
+        if (inserted == 0) {
+            throw new BusinessException(1, HttpStatus.CONFLICT, "用户名已存在");
+        }
+
+        SysUser user = authMapper.findUserByUsername(request.username());
+        authMapper.assignRole(user.getId(), "user");
     }
 
     public UserInfoResponse getUserInfo(AuthenticatedUser principal) {
