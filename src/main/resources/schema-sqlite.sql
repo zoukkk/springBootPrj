@@ -95,9 +95,47 @@ CREATE TABLE IF NOT EXISTS sys_role_menu (
     UNIQUE(role_id, menu_id)
 );
 
+-- 英雄联盟宇宙阵营/城邦表
+CREATE TABLE IF NOT EXISTS biz_faction (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    parent_id INTEGER NOT NULL DEFAULT 0,
+    name TEXT NOT NULL,
+    code TEXT NOT NULL,
+    icon_url TEXT DEFAULT '',
+    theme_color TEXT DEFAULT '#C89B3C',
+    leader_hero_id INTEGER DEFAULT NULL,
+    description TEXT,
+    sort INTEGER DEFAULT 0,
+    status INTEGER NOT NULL DEFAULT 1,
+    del_flag INTEGER NOT NULL DEFAULT 0,
+    create_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    update_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 英雄档案与阵营成员关系表
+CREATE TABLE IF NOT EXISTS biz_hero (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    riot_champion_id TEXT DEFAULT NULL,
+    data_version TEXT DEFAULT NULL,
+    avatar_url TEXT DEFAULT '',
+    name TEXT NOT NULL,
+    nickname TEXT DEFAULT '',
+    role TEXT DEFAULT '',
+    faction_id INTEGER DEFAULT NULL,
+    gender INTEGER NOT NULL DEFAULT 0,
+    introduction TEXT,
+    status INTEGER NOT NULL DEFAULT 1,
+    del_flag INTEGER NOT NULL DEFAULT 0,
+    create_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    update_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE INDEX IF NOT EXISTS idx_sys_user_role_user ON sys_user_role(user_id);
 CREATE INDEX IF NOT EXISTS idx_sys_role_menu_role ON sys_role_menu(role_id);
 CREATE INDEX IF NOT EXISTS idx_sys_menu_parent ON sys_menu(parent_id);
+CREATE INDEX IF NOT EXISTS idx_biz_faction_parent_id ON biz_faction(parent_id);
+CREATE INDEX IF NOT EXISTS idx_biz_faction_status_del ON biz_faction(status, del_flag);
+CREATE INDEX IF NOT EXISTS idx_biz_hero_faction_status ON biz_hero(faction_id, status, del_flag);
 
 INSERT OR IGNORE INTO sys_role (id, code, name) VALUES
     (1, 'admin', '超级管理员'),
@@ -110,7 +148,8 @@ VALUES
     (2, 0, '系统管理', '/system', 'SystemLayout', 'Setting', 2, 1, 1),
     (3, 2, '用户管理', '/system/users', 'UserView', 'User', 1, 1, 1),
     (4, 2, '角色管理', '/system/roles', 'RoleView', 'UserFilled', 2, 1, 1),
-    (5, 2, '菜单管理', '/system/menus', 'MenuView', 'Menu', 3, 1, 1);
+    (5, 2, '菜单管理', '/system/menus', 'MenuView', 'Menu', 3, 1, 1),
+    (6, 0, '阵营管理', '/depts', 'FactionView', 'OfficeBuilding', 3, 1, 1);
 
 INSERT OR IGNORE INTO sys_role_menu (role_id, menu_id) VALUES (2, 1);
 

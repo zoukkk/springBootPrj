@@ -3,7 +3,7 @@ setlocal
 cd /d "%~dp0"
 
 set "PORT=8080"
-set "JAR=target\springbootProject-1.0-SNAPSHOT.jar"
+set "JAR=target\springbootProject-1.0-SNAPSHOT-exec.jar"
 set "LOG=backend.log"
 
 if not exist "%JAR%" (
@@ -26,5 +26,5 @@ echo [INFO] Logs: %CD%\%LOG%
 start "Spring Boot Backend" /min cmd /c "java -jar %JAR% --server.port=%PORT% >> %LOG% 2>&1"
 echo [INFO] Backend start command submitted.
 echo [INFO] Verify with: http://127.0.0.1:%PORT%/api/auth/login
-timeout /t 3 /nobreak >nul
+ping 127.0.0.1 -n 4 >nul
 endlocal

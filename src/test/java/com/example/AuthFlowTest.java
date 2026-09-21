@@ -110,10 +110,13 @@ class AuthFlowTest {
         mockMvc.perform(get("/api/auth/menus").header("Authorization", bearer(second)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(0))
-                .andExpect(jsonPath("$.data.length()").value(2))
+                .andExpect(jsonPath("$.data.length()").value(3))
                 .andExpect(jsonPath("$.data[0].name").value("首页"))
                 .andExpect(jsonPath("$.data[1].name").value("系统管理"))
-                .andExpect(jsonPath("$.data[1].children.length()").value(3));
+                .andExpect(jsonPath("$.data[1].children.length()").value(3))
+                .andExpect(jsonPath("$.data[2].name").value("阵营管理"))
+                .andExpect(jsonPath("$.data[2].path").value("/depts"))
+                .andExpect(jsonPath("$.data[2].component").value("FactionView"));
 
         String third = login();
         mockMvc.perform(get("/api/auth/userinfo").header("Authorization", bearer(first)))

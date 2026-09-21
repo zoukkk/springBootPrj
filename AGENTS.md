@@ -81,6 +81,8 @@
   - `sys_user_role`
   - `sys_menu`
   - `sys_role_menu`
+  - `biz_faction`
+  - `biz_hero`
 
 ### 后端
 
@@ -234,6 +236,55 @@ Response：
 - 动态菜单
 - 动态路由
 - 退出登录
+- 阵营树查询、新增、修改和软删除
+- 阵营归档查询、恢复和启用/停用
+- 英雄档案查询、新增、修改、软删除及阵营成员挂载/移出
+
+### 阵营接口
+
+```text
+GET    /api/factions/list?keyword={nameOrCode}
+GET    /api/factions/detail/{id}
+POST   /api/factions/add
+PUT    /api/factions/edit/{id}
+DELETE /api/factions/delete/{id}
+GET    /api/factions/deleted-list?keyword={nameOrCode}
+PUT    /api/factions/restore/{id}
+PUT    /api/factions/status/{id}
+```
+
+- 阵营接口必须携带有效 Token，当前不额外限制 `admin` / `user` 角色。
+- 后续 CRUD 接口路径统一使用语义化动作：新增 `add`、查询 `list`、修改 `edit`、删除 `delete`、详情 `detail`。
+- 菜单显示名称为“阵营管理”，前端路由映射路径为 `/depts`，组件映射键为 `FactionView`。
+- 阵营使用 `biz_faction` 业务表，表示符文之地及其城邦/下属组织，不再沿用通用部门模型。
+- 阵营树响应包含计算字段 `level`；关键字按名称或编码模糊匹配，并保留命中节点的祖先链。
+- 前端字段统一为 `iconUrl`、`themeColor`、`leaderHeroId`；`leaderHeroId` 对应 `biz_hero.id`，当前示例数据已将嘉文四世设为德玛西亚领袖。
+- 阵营节点响应包含 `members` 英雄成员列表；成员字段包括 `id`、`avatarUrl`、`name`、`nickname`、`role`、`factionId`、`gender`、`introduction`、`status`。
+- 阵营存在未删除成员时禁止删除，必须先迁移成员。
+- `code` 在未删除阵营中按大小写不敏感方式保持唯一。
+- 修改父级时禁止指向自身或当前节点的任意后代。
+- 存在未删除直接子阵营时禁止删除；删除使用 `del_flag=1` 软删除。
+- 阵营恢复前必须校验父阵营有效且编码未冲突；阵营状态接口支持可选的下属阵营及英雄级联处理。
+
+### 英雄与成员接口
+
+```text
+GET    /api/heroes/list?factionId={id}&keyword={text}&pageNum=1&pageSize=20
+GET    /api/heroes/detail/{id}
+POST   /api/heroes/add
+PUT    /api/heroes/edit/{id}
+DELETE /api/heroes/delete/{id}
+PUT    /api/heroes/assign/{id}
+PUT    /api/heroes/remove/{id}
+PUT    /api/heroes/status/{id}
+POST   /api/heroes/sync-riot?overwriteFaction=true
+```
+
+- 英雄档案删除使用软删除；成员移出只解除阵营关联，不删除英雄档案。
+- 阵营领袖不能直接移出、跨阵营调整或删除，必须先修改原阵营的 `leaderHeroId`。
+- 未分配阵营的英雄可在任命领袖时自动挂载到目标阵营。
+- Riot 同步以 Data Dragon 英雄资料为主、Universe 阵营归属为辅，通过 `riotChampionId` 幂等更新；同步不得覆盖人工维护的角色、性别和状态。
+- 完整请求和响应示例以根目录 `FACTION_API.md` 为准。
 
 
 ### Agent 行为

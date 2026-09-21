@@ -37,6 +37,7 @@ public class SystemDataInitializer implements ApplicationRunner {
         upsertMenu(3L, 2L, "用户管理", "/system/users", "UserView", "User", 1);
         upsertMenu(4L, 2L, "角色管理", "/system/roles", "RoleView", "UserFilled", 2);
         upsertMenu(5L, 2L, "菜单管理", "/system/menus", "MenuView", "Menu", 3);
+        upsertMenu(6L, 0L, "阵营管理", "/depts", "FactionView", "OfficeBuilding", 3);
     }
 
     private void upsertMenu(Long id, Long parentId, String name, String path,
